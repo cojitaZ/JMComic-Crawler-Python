@@ -1,11 +1,13 @@
 from .jm_downloader import *
 
+__DOWNLOAD_API_RET = Tuple[JmAlbumDetail, JmDownloader]
+
 
 def download_batch(download_api,
                    jm_id_iter: Union[Iterable, Generator],
                    option=None,
                    downloader=None,
-                   ) -> Set[Tuple[JmAlbumDetail, JmDownloader]]:
+                   ) -> Set[__DOWNLOAD_API_RET]:
     """
     批量下载 album / photo
 
@@ -46,7 +48,7 @@ def download_album(jm_album_id,
                    option=None,
                    downloader=None,
                    callback=None,
-                   ):
+                   ) -> Union[__DOWNLOAD_API_RET, Set[__DOWNLOAD_API_RET]]:
     """
     下载一个本子（album），包含其所有的章节（photo）
 
@@ -100,7 +102,7 @@ def new_downloader(option=None, downloader=None) -> JmDownloader:
     return downloader(option)
 
 
-def create_option(filepath):
+def create_option_by_file(filepath):
     return JmModuleConfig.option_class().from_file(filepath)
 
 
@@ -110,4 +112,14 @@ def create_option_by_env(env_name='JM_OPTION_PATH'):
     filepath = get_env(env_name, None)
     ExceptionTool.require_true(filepath is not None,
                                f'未配置环境变量: {env_name}，请配置为option的文件路径')
-    return create_option(filepath)
+    return create_option_by_file(filepath)
+
+
+def create_option_by_str(text: str, mode=None):
+    if mode is None:
+        mode = PackerUtil.mode_yml
+    data = PackerUtil.unpack_by_str(text, mode)[0]
+    return JmModuleConfig.option_class().construct(data)
+
+
+create_option = create_option_by_file

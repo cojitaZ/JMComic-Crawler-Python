@@ -1,4 +1,4 @@
-# 日志自定义 - 如果你不想看到那么多的日志
+# 日志自定义
 
 本文档缘起于 GitHub Discussions: [discussions/195](https://github.com/hect0x7/JMComic-Crawler-Python/discussions/195)
 
@@ -15,7 +15,7 @@ disable_jm_log()
 
 使用配置：
 
-```yml
+```yaml
 log: false
 ```
 
@@ -23,7 +23,7 @@ log: false
 
 使用插件配置
 
-```yml
+```yaml
 log: true
 
 plugins:
@@ -40,13 +40,13 @@ plugins:
 
 给插件配置加上一个`log`配置项即可
 
-```yml
+```yaml
 plugins:
   after_init:
     - plugin: client_proxy # 提高移动端的请求效率的插件
       log: false # 插件自身不打印日志
       kwargs:
-        proxy_client_key: cl_proxy_future
+        proxy_client_key: photo_concurrent_fetcher_proxy
         whitelist: [ api, ]
 ```
 
